@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2025, Muhammad Waleed Badar
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef __USB_DEV_H__
 #define __USB_DEV_H__
 

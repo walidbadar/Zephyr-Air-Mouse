@@ -1,53 +1,83 @@
-.. zephyr:code-sample:: lsmd303dlhc
-   :name: LSM303DLHC Magnetometer and Accelerometer sensor
-   :relevant-api: sensor_interface
+.. _zephyr_air_mouse:
 
-   Get magnetometer and accelerometer data from an LSM303DLHC sensor (polling
-   mode).
+Zephyr Air Mouse
+#########
+
+.. figure:: https://drive.usercontent.google.com/download?id=1usPkM_bNB7gP4r-wur2owl-Ud5mZ43VU&export=download&authuser=0&confirm=t&uuid=3e656ce2-1ea7-4254-a8d3-78e9152e911b&at=AEz70l4f4skaLFgPF0CgSEzE6otP:1742583658543
 
 Overview
 ********
-This sample application periodically reads magnetometer and accelerometer data
-from the LSM303DLHC eCompass module's sensors, and displays the sensor data
-on the console.
 
-Requirements
-************
+This sample application implements an air mouse using the Zephyr RTOS. It utilizes the Zephyr USB subsystem to create a standard USB HID mouse device and the Sensor API to interface with a LIS2DH accelerometer sensor. The air mouse translates physical movement of the device into cursor movement on a connected computer.
 
-This sample uses the LSM303DLHC, ST MEMS system-in-package featuring a
-3D digital linear acceleration sensor and a 3D digital magnetic sensor,
-controlled using the I2C interface.
+Features
+********
+
+* USB HID mouse device implementation
+* LIS2DH accelerometer-based motion detection and translation
+* Plug-and-play compatibility with most operating systems
+* Low latency motion-to-cursor translation
+* Button input support for mouse clicks
+
+Hardware Requirements
+********************
+
+* STM32F3 Discovery board featuring:
+
+  * STM32F303VC microcontroller
+  * USB device capability
+  * LIS2DH accelerometer sensor
+  * User programmable buttons
+
+Software Requirements
+********************
+
+* Zephyr RTOS (version 3.4.0 or newer)
+* West build tools
+* LIS2DH device driver
+
+Building and Running
+*******************
+
+This sample can be built for the STM32F3 Discovery board.
+
+.. zephyr-app-commands::
+   :zephyr-app: samples/application_development/air_mouse
+   :board: stm32f3_disco
+   :goals: build flash
+   :compact:
+
+Usage
+*****
+
+1. Connect your STM32F3 Discovery board to a computer via USB
+2. The device should be recognized as a standard USB mouse
+3. Move the board in the air to control the cursor
+4. Use the user buttons on the board for mouse clicks (configured in the device tree).
+
+Implementation Details
+*********************
+
+The application uses the Zephyr sensor API to read acceleration data from the LIS2DH sensor. This data is processed to filter out noise and calculate cursor movement. The USB HID class is then used to send mouse reports to the connected computer.
+
+Key components:
+
+* LIS2DH accelerometer data acquisition
+* Motion processing algorithm
+* USB HID mouse report generation
+* Button input handling
+
+Troubleshooting
+**************
+
+* If the mouse cursor doesn't move, check that the LIS2DH sensor is properly initialized
+* Verify that the USB connection is properly established
+* Check the system logs for any error messages
+* If cursor movement is erratic, try adjusting the sensitivity settings in the code
 
 References
 **********
 
-For more information about the LSM303DLHC eCompass module, see
-https://www.st.com/en/mems-and-sensors/lsm303dlhc.html
-
-Building and Running
-********************
-
-This project outputs sensor data to the console. It requires a LSM303DLHC
-system-in-package, which is present on the stm32f3_disco board
-
-.. zephyr-app-commands::
-   :zephyr-app: samples/sensor/lsm303dlhc
-   :board: stm32f3_disco
-   :goals: build
-   :compact:
-
-Sample Output
-=============
-
-.. code-block:: console
-
-   Magnetometer data:
-   ( x y z ) = ( 0.531818  -0.435454  -0.089090 )
-   Accelerometer data:
-   ( x y z ) = ( -0.078127  -0.347666  1.105502 )
-   Magnetometer data:
-   ( x y z ) = ( -0.003636  0.297272  -0.255454 )
-   Accelerometer data:
-   ( x y z ) = ( 0.074221  -0.304696  0.972685 )
-
-   <repeats endlessly every 2 seconds>
+* `LIS2DH Datasheet <https://www.st.com/resource/en/datasheet/lis2dh.pdf>`_
+* `Zephyr USB HID Documentation <https://docs.zephyrproject.org/latest/reference/usb/hid.html>`_
+* `Zephyr Sensor API Documentation <https://docs.zephyrproject.org/latest/reference/peripherals/sensor.html>`_

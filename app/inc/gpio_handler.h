@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2025, Muhammad Waleed Badar
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef __GPIO_HANDLER_H__
 #define __GPIO_HANDLER_H__
 

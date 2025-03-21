@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2025, Muhammad Waleed Badar
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #ifndef __ACCELEROMETER_H__
 #define __ACCELEROMETER_H__
 
