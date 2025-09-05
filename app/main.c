@@ -5,6 +5,7 @@
  */
 
 #include "accelerometer.h"
+#include "gpio_handler.h"
 #include "usb_dev.h"
 
 #include <zephyr/logging/log.h>

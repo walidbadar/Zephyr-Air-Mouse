@@ -7,7 +7,6 @@
 / {
     hid_dev_0: hid_dev_0 {
 		compatible = "zephyr,hid-device";
-		interface-name = "HID0";
 		protocol-code = "none";
 		in-report-size = <64>;
 		in-polling-period-us = <1000>;
@@ -16,24 +15,28 @@
 	gpio_keys {
 		compatible = "gpio-keys";
 		key_1: button_1 {
-			label = "Button 1";
+			label = "UP Key";
 			gpios = <&gpioc 6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 			zephyr,code = <INPUT_KEY_1>;
 		};
 		key_2: button_2 {
-			label = "Button 2";
+			label = "Down Key";
 			gpios = <&gpiod 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 			zephyr,code = <INPUT_KEY_2>;
 		};
 		key_3: button_3 {
-			label = "Button 3";
+			label = "Left Key";
 			gpios = <&gpiod 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 			zephyr,code = <INPUT_KEY_3>;
 		};
 		key_4: button_4 {
-			label = "Button 4";
+			label = "Right Key";
 			gpios = <&gpiod 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 			zephyr,code = <INPUT_KEY_4>;
 		};
 	};
+};
+
+&i2c1 {
+	clock-frequency = <I2C_BITRATE_STANDARD>;
 };

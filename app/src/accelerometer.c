@@ -17,9 +17,9 @@ LOG_MODULE_REGISTER(accelerometer, LOG_LEVEL_INF);
 K_MSGQ_DEFINE(accel_tap_msgq, sizeof(uint64_t), 2, 1);
 K_MSGQ_DEFINE(accel_drdy_msgq, sizeof(struct accelerometer_data), 2, 1);
 
-int64_t tap_duration(int64_t current_time) {
-    int64_t duration = 0;
-    static int64_t last_tap_time;
+uint32_t tap_duration(uint32_t current_time) {
+    uint32_t duration = 0;
+    static uint32_t last_tap_time;
     
     if (last_tap_time > 0) {
         duration = current_time - last_tap_time;

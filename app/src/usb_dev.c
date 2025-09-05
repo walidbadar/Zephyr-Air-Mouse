@@ -61,7 +61,7 @@ struct hid_device_ops hid_ops = {
 	.set_report = hid_set_report,
 };
 
-static void msg_cb(struct usbd_context *const usbd_ctx,
+static void usb_msg_cb(struct usbd_context *const usbd_ctx,
 		   const struct usbd_msg *const msg)
 {
 	LOG_INF("USBD message: %s", usbd_msg_type_string(msg->type));
@@ -90,7 +90,7 @@ static int enable_usb_device_next(void)
 	struct usbd_context *sample_usbd;
 	int ret;
 
-	sample_usbd = sample_usbd_init_device(msg_cb);
+	sample_usbd = sample_usbd_init_device(usb_msg_cb);
 	if (sample_usbd == NULL) {
 		LOG_ERR("Failed to initialize USB device");
 		return -ENODEV;
@@ -109,7 +109,7 @@ static int enable_usb_device_next(void)
 	return 0;
 }
 
-int kb_fn(void) {
+static int usb_kbd(void) {
 	struct input_event kb_event = {0};
 	int ret;
 
@@ -130,13 +130,13 @@ int kb_fn(void) {
                 break;
 
 			case INPUT_KEY_3:
-				report[REPORT_IDX] = CONSUMER_REPORT_IDX;
-                report[BTN_REPORT_IDX] = kb_event.value ? HID_CONSUMER_PLAY_PAUSE : 0;
+				report[REPORT_IDX] = KB_REPORT_IDX;
+                report[BTN_REPORT_IDX] = kb_event.value ? HID_KEY_RIGHT : 0;
                 break;
                 
             case INPUT_KEY_4:
-                report[REPORT_IDX] = CONSUMER_REPORT_IDX;
-                report[BTN_REPORT_IDX] = kb_event.value ? HID_CONSUMER_SCAN_NEXT_TRACK : 0;
+                report[REPORT_IDX] = KB_REPORT_IDX;
+                report[BTN_REPORT_IDX] = kb_event.value ? HID_KEY_LEFT : 0;
                 break;
 
             default:
@@ -148,7 +148,7 @@ int kb_fn(void) {
 	return ret;
 }
 
-int mouse_fn(void) {
+static int usb_mouse(void) {
     struct accelerometer_data accel_data = {0};
     uint64_t duration = 0;
     uint8_t tap_event = 0;
@@ -183,9 +183,15 @@ int usb_dev_write(const struct device *hid) {
 	/* Clear report buffer*/
 	memset(report, 0, sizeof(report));
 
-	ret = mouse_fn();
+	ret = usb_mouse();
+	if (ret < 0) {
+		LOG_ERR("Mouse submit report error, %d", ret);
+	}
 
-	ret = kb_fn();
+	ret = usb_kbd();
+	if (ret < 0) {
+		LOG_ERR("Keyboard submit report error, %d", ret);
+	}
 
 	ret = hid_device_submit_report(hid, REPORT_COUNT, report);
 	if (ret < 0) {

@@ -23,7 +23,7 @@ struct accelerometer_data {
 	int8_t z;
 };
 
-int64_t tap_duration(int64_t current_time);
+uint32_t tap_duration(uint32_t current_time);
 int accelerometer_init(const struct device *dev);
 
 #endif
